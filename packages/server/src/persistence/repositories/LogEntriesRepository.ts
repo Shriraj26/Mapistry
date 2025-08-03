@@ -26,4 +26,11 @@ export class LogEntriesRepository {
     await Database.deleteLogEntry(logEntry.id.value);
     return logEntry.id.value;
   }
+
+  async editLogEntry(logEntryId: string, entry: LogEntry): Promise<LogEntry> {
+    const dto = LogEntriesPersistenceMapper.toPersistence(entry);
+    const updatedRecord = await Database.editLogEntry(logEntryId, dto);
+    return LogEntriesPersistenceMapper.fromPersistence(updatedRecord);
+  }
+
 }

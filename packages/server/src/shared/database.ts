@@ -80,6 +80,19 @@ export class Database {
     return logEntryId;
   }
 
+  public static async editLogEntry(logEntryId: string, entry: LogEntriesRecord) {
+    await this.simulateDbSlowness();
+    const db = await fs.readFileSync(FILE_NAME, 'utf8');
+    const allEntries = JSON.parse(db) as LogEntriesRecord[];
+    const index = allEntries.findIndex((le) => le.id === logEntryId);
+    if (index !== -1) {
+      allEntries[index] = { ...allEntries[index], ...entry };
+      await fs.writeFileSync(FILE_NAME, JSON.stringify(allEntries));
+      return allEntries[index];
+    }
+    throw new Error(`Log entry with id ${logEntryId} not found`);
+  }
+
   private static simulateDbSlowness(ms = 1000) {
     return new Promise((resolve) => {
       setTimeout(resolve, ms);

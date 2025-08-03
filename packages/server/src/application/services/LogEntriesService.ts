@@ -28,4 +28,16 @@ export class LogEntriesService {
     const logEntry = await logEntryRepository.findById(logEntryId);
     return logEntryRepository.destroyLogEntry(logEntry);
   }
+
+  async editLogEntry(
+    logId: string,
+    logEntryId: string,
+    createLogEntry: CreateLogEntryRequest,
+  ): Promise<LogEntryResponse> {
+    const mapper = new LogEntriesApiMapper();
+    const logEntry = mapper.fromRequest(logId, createLogEntry);
+    const repository = new LogEntriesRepository(logId);
+    const updatedEntry = await repository.editLogEntry(logEntryId, logEntry);
+    return mapper.toResponse(updatedEntry);
+  }
 }
