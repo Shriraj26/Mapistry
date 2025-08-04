@@ -37,7 +37,6 @@ export function ViewLogEntriesTable({ logId }: ViewLogEntriesTableProps) {
   
   const handleDelete = useCallback(
     async (logEntry) => {
-      console.log('Delete log entry:', logEntry);
       // eslint-disable-next-line no-restricted-globals, no-alert
       if (confirm('Are you sure?')) {
         await deleteLogEntry(logEntry);
@@ -49,7 +48,7 @@ export function ViewLogEntriesTable({ logId }: ViewLogEntriesTableProps) {
 
   const handleEdit = useCallback((logEntry) => {
     // Logic for editing a log entry can be implemented here
-    console.log('Edit log entry:', logEntry);
+    
     const formattedLogEntry: LogEntryResponse = {
       logDate: new Date(logEntry.logDate).toISOString().split('T')[0], // Pre-format the date
       logValue: logEntry.logValue,
@@ -66,14 +65,9 @@ export function ViewLogEntriesTable({ logId }: ViewLogEntriesTableProps) {
 
   const handleEditLogEntry = useCallback(
     async (logEntry) => {
-      console.log('Handle edit log entry:', logEntry);
-      
-      
       // Call the API to update the log entry
       await editLogEntry(logEntry);
       // Logic for handling the edited log entry
-      console.log('Edited log entry:', logEntry);
-
       setIsEditEntryOpen(false);
       refreshLogEntries();
     },

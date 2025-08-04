@@ -67,7 +67,6 @@ export class Database {
     await this.simulateDbSlowness();
     const db = await fs.readFileSync(FILE_NAME, 'utf8');
     const allEntries = JSON.parse(db) as LogEntriesRecord[];
-    // console.log("allEntries log entry: ", allEntries);
     return allEntries.find((le) => le.id === logEntryId) || null;
   }
 
@@ -89,10 +88,7 @@ export class Database {
     // Get the entry that belongs to entry.id
     const index = allEntries.findIndex((le) => le.id === entry.id);
     if(index !== -1){
-      console.log(`Editing log entry with id: ${entry.id}`);
-      console.log("To update entry: ", entry);
       allEntries[index] = entry;
-      console.log(allEntries[index]);
       await fs.writeFileSync(FILE_NAME, JSON.stringify(allEntries));
     }
     

@@ -1,5 +1,4 @@
-import { CreateLogEntryRequest, LogEntryResponse } from '@mapistry/take-home-challenge-shared';
-import { log } from 'console';
+import { LogEntryResponse } from '@mapistry/take-home-challenge-shared';
 import { ReactNode } from 'react';
 import styled from 'styled-components';
 

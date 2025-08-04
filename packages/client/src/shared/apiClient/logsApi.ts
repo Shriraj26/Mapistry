@@ -31,8 +31,6 @@ export async function createLogEntry({
   logId,
   logEntry,
 }: CreateLogEntryParams): Promise<CreateLogEntryResponse> {
-  console.log("original Creatre Log Entry ", logEntry)
-  console.log("IN Create Log entry", { logEntry })
   const res = await fetch(`/api/logs/${logId}/log-entries`, {
     body: JSON.stringify({ logEntry }),
     method: 'put',
@@ -48,7 +46,6 @@ export async function createLogEntry({
 }
 
 export async function deleteLogEntry(logEntry: LogEntryResponse) {
-  console.log("Implementing deleteLogEntry function ", logEntry);
   const { logId, id } = logEntry;
   const res = await fetch(`/api/logs/${logId}/log-entries/${id}`, {
     method: 'delete',
@@ -64,8 +61,6 @@ export async function deleteLogEntry(logEntry: LogEntryResponse) {
 export async function editLogEntry(logEntryResponse: LogEntryResponse): Promise<CreateLogEntryResponse>{
   
   const { logId, id, logDate, logValue } = logEntryResponse;
-  // console.log("Payload is ", {logEntry});
-  
   const res = await fetch(
     `/api/logs/${logId}/log-entries/${id}`,
     {

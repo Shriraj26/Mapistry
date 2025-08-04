@@ -12,7 +12,6 @@ export class LogEntriesPersistenceMapper {
   }
 
   static fromPersistence(logEntriesRecord: LogEntriesRecord): LogEntry {
-    console.log('Converting LogEntriesRecord to LogEntry:', logEntriesRecord);
     return LogEntry.createFromPersistence(
       logEntriesRecord,
       logEntriesRecord.id,

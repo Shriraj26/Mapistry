@@ -20,7 +20,6 @@ export class LogEntriesRepository {
         `log entry not found for id: ${logEntryId}`,
       );
     }
-    console.log('Found log entry:', record);
     return LogEntriesPersistenceMapper.fromPersistence(record);
   }
 
@@ -31,8 +30,6 @@ export class LogEntriesRepository {
 
   // Method to edit a log entry
   async editLogEntry(logEntry: LogEntry): Promise<LogEntryResponse> {
-    console.log('Editing log entry: repo', logEntry);
-    console.log('Editing log entry:', logEntry.id.value);
     const existingRecord = await Database.findById(logEntry.id.value);
     if (!existingRecord) {
       throw new RecordNotFoundError(
@@ -40,8 +37,6 @@ export class LogEntriesRepository {
       );
     }
     const dto = LogEntriesPersistenceMapper.toPersistence(logEntry);
-    console.log('Updating log entry in database dto :', dto);
-    console.log('Editing log entry:', logEntry);
     await Database.editLogEntry(dto);
     return LogEntriesPersistenceMapper.toPersistence(logEntry);
   }

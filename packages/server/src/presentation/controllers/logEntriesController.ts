@@ -60,8 +60,6 @@ logEntriesController.patch(
   async (req, res) => {
     const { logId, logEntryId } = req.params;
     const { logEntry } = req.body;
-    console.log("Print log entry body", logEntry);
-    console.log("lof id and logentryId", { logId, logEntryId });
     const logEntryService = new LogEntriesService();
     try {
       const updatedLogEntry = await logEntryService.editLogEntry(
@@ -71,7 +69,6 @@ logEntriesController.patch(
       );
       res.json(updatedLogEntry);
     } catch (e: unknown) {
-      console.log("Error in edit log entry", e);
       if (e instanceof RecordNotFoundError) {
         res.status(HttpStatusCode.INVALID_DATA);
         res.send(e.toString());
