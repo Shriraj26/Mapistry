@@ -24,4 +24,19 @@ export class LogEntriesApiMapper {
       logValue: createLogEntry.logValue,
     });
   }
+
+  public fromRequestWithId(
+    logId: string,
+    logEntryId: string,
+    createLogEntry: CreateLogEntryRequest,
+  ): LogEntry {
+    return LogEntry.createFromPersistence(
+      {
+        logId,
+        logDate: new Date(createLogEntry.logDate),
+        logValue: createLogEntry.logValue,
+      },
+      logEntryId,
+    );
+  }
 }

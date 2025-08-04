@@ -1,3 +1,4 @@
+import { LogEntryResponse } from '@mapistry/take-home-challenge-shared';
 import { LogEntry } from '../../domain/entities/LogEntry';
 import { Database } from '../../shared/database';
 import { RecordNotFoundError } from '../../shared/errors';
@@ -19,6 +20,7 @@ export class LogEntriesRepository {
         `log entry not found for id: ${logEntryId}`,
       );
     }
+    console.log('Found log entry:', record);
     return LogEntriesPersistenceMapper.fromPersistence(record);
   }
 
@@ -27,10 +29,21 @@ export class LogEntriesRepository {
     return logEntry.id.value;
   }
 
-  async editLogEntry(logEntryId: string, entry: LogEntry): Promise<LogEntry> {
-    const dto = LogEntriesPersistenceMapper.toPersistence(entry);
-    const updatedRecord = await Database.editLogEntry(logEntryId, dto);
-    return LogEntriesPersistenceMapper.fromPersistence(updatedRecord);
+  // Method to edit a log entry
+  async editLogEntry(logEntry: LogEntry): Promise<LogEntryResponse> {
+    console.log('Editing log entry: repo', logEntry);
+    console.log('Editing log entry:', logEntry.id.value);
+    const existingRecord = await Database.findById(logEntry.id.value);
+    if (!existingRecord) {
+      throw new RecordNotFoundError(
+        `log entry not found for idlogEntry}`,
+      );
+    }
+    const dto = LogEntriesPersistenceMapper.toPersistence(logEntry);
+    console.log('Updating log entry in database dto :', dto);
+    console.log('Editing log entry:', logEntry);
+    await Database.editLogEntry(dto);
+    return LogEntriesPersistenceMapper.toPersistence(logEntry);
   }
 
 }

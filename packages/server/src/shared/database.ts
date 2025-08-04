@@ -67,6 +67,7 @@ export class Database {
     await this.simulateDbSlowness();
     const db = await fs.readFileSync(FILE_NAME, 'utf8');
     const allEntries = JSON.parse(db) as LogEntriesRecord[];
+    // console.log("allEntries log entry: ", allEntries);
     return allEntries.find((le) => le.id === logEntryId) || null;
   }
 
@@ -80,17 +81,22 @@ export class Database {
     return logEntryId;
   }
 
-  public static async editLogEntry(logEntryId: string, entry: LogEntriesRecord) {
+  // This method will edit the log entry in the database.
+  public static async editLogEntry(entry: LogEntriesRecord) {
     await this.simulateDbSlowness();
     const db = await fs.readFileSync(FILE_NAME, 'utf8');
     const allEntries = JSON.parse(db) as LogEntriesRecord[];
-    const index = allEntries.findIndex((le) => le.id === logEntryId);
-    if (index !== -1) {
-      allEntries[index] = { ...allEntries[index], ...entry };
+    // Get the entry that belongs to entry.id
+    const index = allEntries.findIndex((le) => le.id === entry.id);
+    if(index !== -1){
+      console.log(`Editing log entry with id: ${entry.id}`);
+      console.log("To update entry: ", entry);
+      allEntries[index] = entry;
+      console.log(allEntries[index]);
       await fs.writeFileSync(FILE_NAME, JSON.stringify(allEntries));
-      return allEntries[index];
     }
-    throw new Error(`Log entry with id ${logEntryId} not found`);
+    
+    return entry;
   }
 
   private static simulateDbSlowness(ms = 1000) {

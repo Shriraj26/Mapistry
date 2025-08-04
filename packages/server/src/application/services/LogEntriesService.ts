@@ -24,6 +24,7 @@ export class LogEntriesService {
   }
 
   async deleteLogEntry(logId: string, logEntryId: string): Promise<string> {
+    console.log("Log ID in service is ", logId, " and Log Entry ID is ", logEntryId);
     const logEntryRepository = new LogEntriesRepository(logId);
     const logEntry = await logEntryRepository.findById(logEntryId);
     return logEntryRepository.destroyLogEntry(logEntry);
@@ -34,10 +35,24 @@ export class LogEntriesService {
     logEntryId: string,
     createLogEntry: CreateLogEntryRequest,
   ): Promise<LogEntryResponse> {
+    // Create a LogEntry from request  
+    console.log("CreateLogEntryRequest in service is ", createLogEntry);
+    console.log("Log Entry ID in service is ", logEntryId);
+    const logEntryRepository = new LogEntriesRepository(logId);
+    const logEntry = await logEntryRepository.findById(logEntryId);
+    if (!logEntry) {
+      throw new Error(`Log entry with ID ${logEntryId} not found`);
+    }
+    console.log('logEntry in service is ', logEntry);
+    
     const mapper = new LogEntriesApiMapper();
-    const logEntry = mapper.fromRequest(logId, createLogEntry);
-    const repository = new LogEntriesRepository(logId);
-    const updatedEntry = await repository.editLogEntry(logEntryId, logEntry);
-    return mapper.toResponse(updatedEntry);
+    const updatedLogEntry = mapper.fromRequestWithId(logId, logEntryId, createLogEntry);
+    // Update the logEntry with new values
+    console.log('Updated log entry in service', updatedLogEntry);
+    return logEntryRepository.editLogEntry(updatedLogEntry);
+
+
+
+    // logEntry: LogEntry
   }
 }
