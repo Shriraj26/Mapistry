@@ -28,4 +28,24 @@ export class LogEntriesService {
     const logEntry = await logEntryRepository.findById(logEntryId);
     return logEntryRepository.destroyLogEntry(logEntry);
   }
+
+  async editLogEntry(
+    logId: string,
+    logEntryId: string,
+    createLogEntry: CreateLogEntryRequest,
+  ): Promise<LogEntryResponse> {
+    // Create a LogEntry from request  
+    const logEntryRepository = new LogEntriesRepository(logId);
+    const logEntry = await logEntryRepository.findById(logEntryId);
+    if (!logEntry) {
+      throw new Error(`Log entry with ID ${logEntryId} not found`);
+    }
+    const mapper = new LogEntriesApiMapper();
+    const updatedLogEntry = mapper.fromRequestWithId(logId, logEntryId, createLogEntry);
+    return logEntryRepository.editLogEntry(updatedLogEntry);
+
+
+
+    // logEntry: LogEntry
+  }
 }

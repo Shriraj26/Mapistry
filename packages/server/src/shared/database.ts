@@ -80,6 +80,21 @@ export class Database {
     return logEntryId;
   }
 
+  // This method will edit the log entry in the database.
+  public static async editLogEntry(entry: LogEntriesRecord) {
+    await this.simulateDbSlowness();
+    const db = await fs.readFileSync(FILE_NAME, 'utf8');
+    const allEntries = JSON.parse(db) as LogEntriesRecord[];
+    // Get the entry that belongs to entry.id
+    const index = allEntries.findIndex((le) => le.id === entry.id);
+    if(index !== -1){
+      allEntries[index] = entry;
+      await fs.writeFileSync(FILE_NAME, JSON.stringify(allEntries));
+    }
+    
+    return entry;
+  }
+
   private static simulateDbSlowness(ms = 1000) {
     return new Promise((resolve) => {
       setTimeout(resolve, ms);

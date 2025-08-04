@@ -1,3 +1,4 @@
+import { LogEntryResponse } from '@mapistry/take-home-challenge-shared';
 import { LogEntry } from '../../domain/entities/LogEntry';
 import { Database } from '../../shared/database';
 import { RecordNotFoundError } from '../../shared/errors';
@@ -26,4 +27,18 @@ export class LogEntriesRepository {
     await Database.deleteLogEntry(logEntry.id.value);
     return logEntry.id.value;
   }
+
+  // Method to edit a log entry
+  async editLogEntry(logEntry: LogEntry): Promise<LogEntryResponse> {
+    const existingRecord = await Database.findById(logEntry.id.value);
+    if (!existingRecord) {
+      throw new RecordNotFoundError(
+        `log entry not found for idlogEntry}`,
+      );
+    }
+    const dto = LogEntriesPersistenceMapper.toPersistence(logEntry);
+    await Database.editLogEntry(dto);
+    return LogEntriesPersistenceMapper.toPersistence(logEntry);
+  }
+
 }
